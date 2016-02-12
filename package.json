@@ -1,10 +1,13 @@
 {
   "name": "wol",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "wake up on lan",
   "main": "index.js",
   "directories": {
     "test": "test"
+  },
+  "bin":{
+    "wake": "bin/wake"
   },
   "scripts": {
     "test": "node test/test.js"

@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const wol  = require('../');
+
+process.title = path.basename(__filename);
+
+if(process.argv.length != 3){
+  console.log('Usage: ' + process.title + " [mac address]");
+  process.exit(1);
+}
+
+var mac = process.argv[2];
+
+wol.wake(mac, function(err){
+  if(err) throw err;
+  console.log('send magic packet to %s success .', mac);
+});

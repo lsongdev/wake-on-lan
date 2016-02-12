@@ -7,12 +7,15 @@ const dgram = require('dgram');
  * @wiki https://en.wikipedia.org/wiki/Wake-on-LAN
  * @docs http://support.amd.com/TechDocs/20213.pdf
  */
-function createMagicPacket(mac){
+var createMagicPacket = exports.createMagicPacket = function(mac){
   const MAC_LENGTH    = 6;
   const MAC_REPEAT    = 16;
   const PACKET_HEADER = 6;
+  var parts  = mac.match(/\w{2}/g);
+  if(parts.length != MAC_LENGTH)
+    throw new Error("malformed MAC address '" + mac + "'");
   var buffer = new Buffer(PACKET_HEADER);
-  var bufMac = new Buffer(mac.match(/\w{2}/g).map(function(p){
+  var bufMac = new Buffer(parts.map(function(p){
     return parseInt(p, 16);
   }));
   buffer.fill(0xff);
