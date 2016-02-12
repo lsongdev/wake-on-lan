@@ -4,7 +4,7 @@ wake up on lan
 
 ### Installation
 ````
-$ npm install wol --save
+$ [sudo] npm install [-g] wol --save
 ````
 
 ### Example
