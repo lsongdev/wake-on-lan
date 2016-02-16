@@ -8,10 +8,10 @@ const dgram = require('dgram');
  * @docs http://support.amd.com/TechDocs/20213.pdf
  */
 var createMagicPacket = exports.createMagicPacket = function(mac){
-  const MAC_LENGTH    = 6;
-  const MAC_REPEAT    = 16;
-  const PACKET_HEADER = 6;
-  var parts  = mac.match(/\w{2}/g);
+  const MAC_LENGTH    = 0x06;
+  const MAC_REPEAT    = 0x16;
+  const PACKET_HEADER = 0x06;
+  var parts  = mac.match(/[0-9a-fA-F]{2}/g);
   if(!parts || parts.length != MAC_LENGTH)
     throw new Error("malformed MAC address '" + mac + "'");
   var buffer = new Buffer(PACKET_HEADER);
