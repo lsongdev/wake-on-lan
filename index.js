@@ -7,17 +7,15 @@ const dgram = require('dgram');
  * @wiki https://en.wikipedia.org/wiki/Wake-on-LAN
  * @docs http://support.amd.com/TechDocs/20213.pdf
  */
-var createMagicPacket = exports.createMagicPacket = function(mac){
+function createMagicPacket(mac){
   const MAC_LENGTH    = 0x06;
   const MAC_REPEAT    = 0x16;
   const PACKET_HEADER = 0x06;
-  var parts  = mac.match(/[0-9a-fA-F]{2}/g);
+  const parts  = mac.match(/[0-9a-fA-F]{2}/g);
   if(!parts || parts.length != MAC_LENGTH)
-    throw new Error("malformed MAC address '" + mac + "'");
-  var buffer = new Buffer(PACKET_HEADER);
-  var bufMac = new Buffer(parts.map(function(p){
-    return parseInt(p, 16);
-  }));
+    throw new Error(`malformed MAC address "${mac}"`);
+  var buffer = Buffer.alloc(PACKET_HEADER);
+  var bufMac = Buffer.from(parts.map(p => parseInt(p, 16)));
   buffer.fill(0xff);
   for(var i = 0; i < MAC_REPEAT; i++){
     buffer = Buffer.concat([ buffer, bufMac ]);
@@ -31,33 +29,38 @@ var createMagicPacket = exports.createMagicPacket = function(mac){
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-exports.wake = function wake(mac, options, callback){
+function wake(mac, options, callback){
   options = options || {};
   if(typeof options == 'function'){
     callback = options;
   }
-  var defaults = {
+  const { address, port } = Object.assign({
     address : '255.255.255.255',
     port    : 9
-  };
-  for(var k in options){
-    defaults[ k ] = options[ k ];
-  }
-  options = defaults;
+  }, options);
   // create magic packet
   var magicPacket = createMagicPacket(mac);
   var socket = dgram.createSocket(
-    net.isIPv6(options.address) ? 'udp6' : 'udp4'
+    net.isIPv6(address) ? 'udp6' : 'udp4'
   ).on('error', function(err){
     socket.close();
     callback && callback(err);
   }).once('listening', function(){
     socket.setBroadcast(true);
   });
-  socket.send(
-    magicPacket, 0, magicPacket.length,
-    options.port, options.address, function(err, res){
-      callback && callback(err, res == magicPacket.length);
-      socket.close();
+  return new Promise((resolve, reject) => {
+    socket.send(
+      magicPacket, 0, magicPacket.length,
+      port, address, function(err, res){
+        if(err) reject(err);
+        else resolve(res);
+        callback && callback(err, res == magicPacket.length);
+        socket.close();
+    });
   });
+};
+
+module.exports = {
+  wake,
+  createMagicPacket
 };
