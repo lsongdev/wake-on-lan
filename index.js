@@ -17,7 +17,7 @@ function createMagicPacket(mac){
   var buffer = Buffer.alloc(PACKET_HEADER);
   var bufMac = Buffer.from(parts.map(p => parseInt(p, 16)));
   buffer.fill(0xff);
-  for(var i = 0; i < MAC_REPEAT; i++){
+  for(var i = 1; i < MAC_REPEAT; i++){
     buffer = Buffer.concat([ buffer, bufMac ]);
   }
   return buffer;
