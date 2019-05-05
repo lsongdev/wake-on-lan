@@ -1,0 +1,34 @@
+{
+  "name": "wol",
+  "version": "1.0.6",
+  "description": "wake up on lan",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "bin":{
+    "wake": "bin/wake"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/song940/wake-on-lan.git"
+  },
+  "keywords": [
+    "wol",
+    "wake",
+    "lan"
+  ],
+  "author": {
+    "name": "Lsong",
+    "email": "song940@gmail.com",
+    "url": "https://lsong.org"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/song940/wake-on-lan/issues"
+  },
+  "homepage": "https://github.com/song940/wake-on-lan#readme"
+}
