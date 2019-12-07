@@ -52,9 +52,10 @@ function wake(mac, options, callback){
     socket.send(
       magicPacket, 0, magicPacket.length,
       port, address, function(err, res){
+        let result = res == magicPacket.length;
         if(err) reject(err);
-        else resolve(res);
-        callback && callback(err, res == magicPacket.length);
+        else resolve(result);
+        callback && callback(err, result);
         socket.close();
     });
   });

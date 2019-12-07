@@ -1,6 +1,6 @@
 {
   "name": "wol",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "wake up on lan",
   "main": "index.js",
   "directories": {
